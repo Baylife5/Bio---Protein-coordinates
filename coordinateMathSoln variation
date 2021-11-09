@@ -1,0 +1,93 @@
+class Triad:
+
+    def __init__(self,p,q,r):
+            """ Construct a Triad.
+            Example object construction:
+            p1 = Triad( p=(1.,0.,0.), q=(0.,0.,0.), r=(0.,0.,0.) )."""
+            self.p = p
+            self.q = q
+            self.r = r
+
+    def ndot(self,a, b, c):
+        pqr = []
+        vect1 = zip(self.p, self.q, self.r)
+        for ia, ib, ic in vect1:
+            pqr.append(float((ia-ib) *(ic -ib)))
+        return (pqr[0] + pqr[1] + pqr[2])
+
+    def dPQ(self):
+        """ Provides the distance between point p and point q """
+        x = zip(self.p,self.q)
+        l = []
+        for ia, ib in x:
+            l.append(float(pow(ia-ib,2)))
+        return math.sqrt(l[0] + l[1] + l[2])
+
+    def dPR (self):
+        """ Provides the distance between point p and point r """
+        vect = zip(self.p,self.r)
+        pr = []
+        for ia, ib in vect:
+            pr.append(float(pow(ia-ib,2)))
+        return math.sqrt(pr[0]+ pr[1] + pr[2])
+
+    def dQR (self):
+        """ Provides the distance between point q and point r """
+        vect = zip(self.q, self.r)
+        qr = []
+        for ia, ib in vect:
+            qr.append(float(pow(ia-ib,2)))
+        return math.sqrt(qr[0]+ qr[1] + qr[2])
+
+    def angleP (self) :
+        """ Provides the angle made at point p by segments pq and pr (radians). """ 
+        vect1 = zip(self.p, self.q, self.r)
+        vect2 = zip(self.q,self.p)
+        vect3 = zip(self.r,self.p)
+        pqr, qp, rp =[],[],[]
+
+        for ia, ib, ic in vect1:
+            pqr.append(float((ia-ib) *(ic -ib)))
+        for ia, ib in vect2:
+            qp.append(float(pow(ia-ib,2)))
+    
+        for ia,ib in vect3:
+            rp.append(float(pow(ia-ib,2)))
+
+        return math.acos(pqr[0]+ pqr[1] + pqr[2])/ math.sqrt((qp[0]+qp[1]+qp[2]) * (rp[0]+rp[1] + rq[2]))
+
+    def angleQ (self) :
+        """ Provides the angle made at point q by segments qp and qr (radians). """ 
+        vect1 = zip(self.p, self.q, self.r)
+        vect2 = zip(self.p, self.q)
+        vect3 = zip(self.r, self.q)
+        pqr, pq, rq = [], [], []
+    
+        for ia,ib,ic in vect1:
+            pqr.append(float((ia-ib)*(ic-ib)))
+
+        for ia, ib in vect2:
+            pq.append(float(pow(ia-ib,2)))
+    
+        for ia,ib in vect3:
+            rq.append(float(pow(ia-ib,2)))
+    
+        return math.acos(pqr[0] + pqr[1] + pqr[2]) / math.sqrt((pq[0] + pq[1] + pq[2])* (rq[0] + rq[1] +rq[2]))
+    
+    def angleR (self) :
+        """ Provides the angle made at point r by segments rp and rq (radians). """
+        vect1 = zip(self.p, self.q, self.r)
+        vect2 = zip(self.p, self.r)
+        vect3 = zip(self.q, self.r)
+        pqr, pr, qr = [],[],[]
+
+        for ia,ib,ic in vect1:
+            pqr.append(float((ia-ib)*(ic-ib)))
+
+        for ia,ib in vect2:
+            pr.append(float(pow(ia -ib)))
+        
+        for ia,ib in vect3:
+            qr.append(float(pow(ia-ib,2)))
+
+        return math.acos(pqr[0] + pqr[1] +pqr[2]) / math.sqrt((pr[0] + pr[1] + pr[2]) * (qr[0] + qr[1] + qr[2]))
