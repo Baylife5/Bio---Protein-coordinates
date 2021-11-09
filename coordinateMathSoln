@@ -1,0 +1,92 @@
+class Triad:
+    
+    def __init__(self,p,q,r):
+
+        self.p = p
+        self.q = q
+        self.r = r
+        
+#private helper fuctions  
+    def d2 (self,a,b):
+        # calculate squared distance of point a to b
+        return float(sum((ia-ib)*(ia-ib) for ia, ib in zip(a,b)))
+
+    def dot (self,a,b):
+        # dotProduct of standard vectors a, b
+        return float(sum(ia * ib for ia,ib in zip(a,b)))
+    
+    def ndot (self,a,b,c):
+        # dotProduct of vectors a, c standardized to b
+        return float(sum((ia-ib) * (ic-ib) for ia,ib,ic in zip (a,b,c)))
+
+# calculate lengths(distances) of segments PQ, PR and QR
+    def dPQ (self):
+        #Provides the distance between point p and point q 
+        return math.sqrt(self.d2(self.p, self.q))
+
+    def dPR (self):
+        #Provides the distance between point p and point r 
+        return math.sqrt(self.d2(self.p,self.r))
+    
+    def dQR (self):
+        #Provides the distance between point q and point r 
+        return math.sqrt(self.d2(self.q, self.r))
+    
+    def angleP (self):
+        #Provides the angle made at point p by segments pq and pr (radians). 
+        return math.acos(self.ndot(self.q, self.p, self.r) / math.sqrt(self.d2(self.q, self.p) * self.d2(self.r, self.p)))
+    
+    def angleQ (self):
+        #Provides the angle made at point q by segments qp and qr (radians).
+        return math.acos(self.ndot(self.p, self.q, self.r) / math.sqrt(self.d2(self.p, self.q) * self.d2(self.r, self.q)))
+        
+    def angleR (self):
+        #Provides the angle made at point r by segments rp and rq (radians). 
+        return math.acos(self.ndot(self.p,self.r,self.q) / math.sqrt(self.d2(self.p,self.r)*self.d2(self.q,self.r)))
+
+
+
+def main():
+
+    protein_coord = input("Enter the protein coordinates: ")
+    protein = ""
+    c,n,ca = [],[],[]
+
+    print("protein coordinates: ", protein_coord)
+    for r in range(len(protein_coord)):
+        if ord(protein_coord[r]) <= 57 and ord(protein_coord[r]) >= 41 or ord(protein_coord[r]) == 32:
+            protein += protein_coord[r]
+    
+   
+    protein = protein.replace(')', ',')
+    protein = protein.rsplit(',')
+
+
+    for i in range(9):
+        if i < 3:
+            c.append(float(protein[i]))
+        if i > 2 and i < 6:
+            n.append(float(protein[i]))
+        if i > 5: 
+            ca.append(float(protein[i]))
+
+    print("\n\tv1","\tv2", "\tv3")
+    print("C:",c)
+    print("\nN:",n)
+    print("\nCa:",ca)
+
+    show = Triad(c,n,ca)
+    prod1 = show.ndot(c,n,ca)
+
+    n_c = Triad.dPQ(show)
+    n_ca = Triad.dQR(show)
+    dis = Triad.dPR(show)
+
+    v = round((float(math.acos(prod1/(n_c * n_ca)) * 180)/math.pi),2)
+    
+    print("\n\nGiven the 3 protein coordinates 'C, N, CA' we have that:")
+    print( "\nN-C bond length =","%.2f" % n_c)
+    print( "\nN-Ca bond length =","%.2f" % n_ca)
+    print( "\nC-N-Ca bond angle =",v )
+
+main()
